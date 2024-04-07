@@ -4,6 +4,12 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+var http = require('http');
+
+http.createServer(function (req, res) {
+  res.write('test server'); 
+  res.end();
+}).listen(80)
 
 // "get"
 app.get('/user', async (req, res) => {
@@ -133,5 +139,5 @@ app.post('/logoff', async (req, res) => {
 
 
 app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server is running at http:${port}`);
 });
