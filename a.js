@@ -9,7 +9,7 @@ var http = require('http');
 http.createServer(function (req, res) {
   res.write('test server'); 
   res.end();
-}).listen(80)
+})
 
 // "get"
 app.get('/user', async (req, res) => {
