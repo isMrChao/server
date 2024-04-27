@@ -113,6 +113,58 @@ app.post('/register', async (req, res) => {
         await client.close();
     }
 });
+// post template
+app.post('/any', async (req, res) => {
+    const client = new MongoClient('mongodb+srv://test1:test1@cluster0.7nihy3k.mongodb.net/');
+    try {
+        await client.connect();
+        const db = client.db('userData');
+        const collection = db.collection('one');
+        const user = await collection.find({ email: req.query.email });
+        if (!user) {
+            res.status(404).send('no such user');
+        } else {
+            // const pass = await collection.find({ password: req.query.password });
+            if (user.password != req.query.password) {
+                res.status(404).send('wrong password');
+            } else {
+                // actual activity
+            }
+        }
+
+    } catch (err) { 
+        console.error(err);
+        res.status(500).send('Error connecting to database');
+    } finally {
+        await client.close();
+    }
+});
+
+app.post('/login', async (req, res) => {
+    const client = new MongoClient('mongodb+srv://test1:test1@cluster0.7nihy3k.mongodb.net/');
+    try {
+        await client.connect();
+        const db = client.db('userData');
+        const collection = db.collection('one');
+        const user = await collection.findOne({ email: req.body.email });
+        if (!user) {
+            res.status(404).send('User not found');
+        } else {
+            const isValidPassword = (req.body.password === user.password);
+            if (isValidPassword) {
+                res.status(200).send('Login successful');
+            } else {
+                res.status(404).send('Invalid credentials');
+            }
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error connecting to database');
+    } finally {
+        await client.close();
+    }
+});
+
 
 app.post('/logoff', async (req, res) => {
     const client = new MongoClient('mongodb+srv://test1:test1@cluster0.7nihy3k.mongodb.net/');
