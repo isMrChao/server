@@ -99,12 +99,13 @@ app.post('/register', async (req, res) => {
         await client.connect();
         const db = client.db('userData');
         const collection = db.collection('one');
-        const user = await collection.find({ email: req.query.email });
+        const user = await collection.findOne({ email: req.body.email });
         if (user) {
+            console.log(req.body.email);
             res.status(404).send('User with same email already exists');
         } else {
-            const result = await collection.insertOne({ name: req.body.name, email: req.body.email, registerdate: new Date,lastLogin: new Date, activeTime: 0,finishedTopic : [], ongoingTopic:[],accuracyRate:0});
-            res.send(`name: ${req.body.name}`);
+            const result = await collection.insertOne({ password: req.body.password,name: req.body.name, email: req.body.email, registerdate: new Date,lastLogin: new Date, activeTime: 0,finishedTopic : [], ongoingTopic:[],accuracyRate:0});
+            res.send(`email: ${req.body.email}`);
         }
     } catch (err) { 
         console.error(err);
